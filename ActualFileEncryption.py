@@ -7,6 +7,7 @@ import click
 @click.command()
 @click.option('getkey&iv')
 def get_key_and_iv(password, salt, key_len, iv_len):
+    '''MD5 digest algorithm; generates a 16 byte string for the key and iv values '''
     d = d_i = ''
 
     while len(d) < key_len + iv_len:
@@ -17,6 +18,7 @@ def get_key_and_iv(password, salt, key_len, iv_len):
 
 @click.option('encrypt')
 def encrypt(in_file, out_file, password, key_len=32):
+    '''Encrypts the file in AES format; both the block sizes and keys must be any multiple of 32'''
     block_size = AES.block_size
     salt = Random.new().read(block_size - len('Salted__'))
     key, iv = get_key_and_iv(password, salt, key_len, block_size)
@@ -36,6 +38,7 @@ def encrypt(in_file, out_file, password, key_len=32):
 
 @click.option('decrypt')
 def decrypt(in_file, out_file, password, key_len=32):
+    '''Decrypts the file.'''
     block_size = AES.block_size
     salt = in_file.read(block_size)[len('Salted__'):]
     key, iv = get_key_and_iv(password, salt, key_len, block_size)
