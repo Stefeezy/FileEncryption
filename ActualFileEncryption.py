@@ -1,8 +1,11 @@
 from Crypto.Cipher import AES
 from Crypto import Random
 from hashlib import md5
+import click
 
 
+@click.command()
+@click.option('getkey&iv')
 def get_key_and_iv(password, salt, key_len, iv_len):
     d = d_i = ''
 
@@ -12,6 +15,7 @@ def get_key_and_iv(password, salt, key_len, iv_len):
     return d[:key_len], d[key_len:key_len + iv_len]
 
 
+@click.option('encrypt')
 def encrypt(in_file, out_file, password, key_len=32):
     block_size = AES.block_size
     salt = Random.new().read(block_size - len('Salted__'))
@@ -29,6 +33,7 @@ def encrypt(in_file, out_file, password, key_len=32):
         out_file.write(ciph.encrypt(chunk))
 
 
+@click.option('decrypt')
 def decrypt(in_file, out_file, password, key_len=32):
     block_size = AES.block_size
     salt = in_file.read(block_size)[len('Salted__'):]
