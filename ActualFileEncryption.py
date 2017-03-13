@@ -22,6 +22,7 @@ def encrypt(in_file, out_file, password, key_len=32):
     key, iv = get_key_and_iv(password, salt, key_len, block_size)
     ciph = AES.new(key, AES.MODE_CBC, iv)
     out_file.write('Salted__' + salt)
+    #finished process
     fin = False
 
     while not fin:
